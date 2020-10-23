@@ -19,10 +19,6 @@ func init() {
 	}
 }
 
-func main() {
-	fmt.Println("Hello, Pondashi!")
-}
-
 var (
 	Token      string
 	GuildID    string
@@ -31,3 +27,7 @@ var (
 	Folder     string
 	err        error
 )
+
+func main() {
+	fmt.Println("Hello, Pondashi!")
+}
