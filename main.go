@@ -22,3 +22,12 @@ func init() {
 func main() {
 	fmt.Println("Hello, Pondashi!")
 }
+
+var (
+	Token      string
+	GuildID    string
+	TChannelID string
+	VChannelID string
+	Folder     string
+	err        error
+)
