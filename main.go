@@ -107,3 +107,22 @@ func checkCommand(m string) bool {
 	}
 	return false
 }
+
+func getCountsRing() []int {
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	hour := time.Now().In(jst).Hour()
+
+	if hour == 0 {
+		hour = 12
+	}
+	if hour > 12 {
+		hour = hour - 12
+	}
+
+	slice := make([]int, 12)
+	for i := range make([]int, hour) {
+		slice = append(slice, (i%2)+1)
+	}
+
+	return slice
+}
