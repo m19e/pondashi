@@ -119,6 +119,16 @@ func checkStamp(m string) bool {
 	return false
 }
 
+func attachCodec(m string) string {
+	switch m {
+	case "hnn_aha", "kit_pya", "hgc_empty":
+		return fmt.Sprintf("%s.%s", m, "m4a")
+	case "lifesaver":
+		return fmt.Sprintf("%s.%s", m, "mp3")
+	}
+	return "Bell_use1.ogg"
+}
+
 func getCountsRing() []int {
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 	hour := time.Now().In(jst).Hour()
