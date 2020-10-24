@@ -90,12 +90,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if dgv == nil {
 				return
 			}
-			// slice := []int{1,2,1,2,1,2,1}
-			// for i := 0; i < len(s); i++{
-			// 	fmt.Println(i,s[i])
-			// }
-			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "Bell_use1.ogg"), make(chan bool))
-			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "Bell_use2.ogg"), make(chan bool))
+
+			counts := getCountsRing()
+
+			for _, num := range counts {
+				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
+			}
 		}
 	}
 }
