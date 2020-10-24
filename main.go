@@ -113,6 +113,14 @@ func checkCommand(m string) bool {
 	return false
 }
 
+func checkStamp(m string) bool {
+	switch m {
+	case "hnn_aha":
+		return true
+	}
+	return false
+}
+
 func getCountsRing() []int {
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 	hour := time.Now().In(jst).Hour()
