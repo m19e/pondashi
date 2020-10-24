@@ -1,9 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
+	"github.com/bwmarrin/dgvoice"
+	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 )
 
@@ -12,7 +17,7 @@ func init() {
 		os.Setenv("GO_ENV", "dev")
 	}
 
-	err := godotenv.Load(".env%s", os.Getenv("GO_ENV"))
+	err := godotenv.Load(fmt.Sprintf(".env%s", os.Getenv("GO_ENV")))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,6 +30,8 @@ var (
 	VChannelID string
 	Folder     string
 	err        error
+
+	dgv *discordgo.VoiceConnection
 )
 
 func main() {
@@ -33,4 +40,69 @@ func main() {
 	TChannelID = os.Getenv("TEXT_CHANNEL_ID")
 	VChannelID = os.Getenv("VOICE_CHANNEL_ID")
 	Folder = "sounds"
+
+	dg, err := discordgo.New("Bot " + Token)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = dg.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dg.AddHandler(messageCreate)
+
+	fmt.Println("Pondashi is now running.  Press CTRL-C to exit.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-sc
+
+	// Cleanly close down the Discord session.
+	dg.Close()
+}
+
+func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
+	if m.Author.ID == s.State.User.ID {
+		return
+	}
+
+	if !checkCommand(m.Content[1:]) {
+	} else {
+		switch m.Content {
+		case "!join":
+			dgv, err = s.ChannelVoiceJoin(GuildID, VChannelID, false, true)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		case "!leave":
+			if dgv == nil {
+				return
+			}
+			err = dgv.Disconnect()
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		case "!jihou":
+			if dgv == nil {
+				return
+			}
+			// slice := []int{1,2,1,2,1,2,1}
+			// for i := 0; i < len(s); i++{
+			// 	fmt.Println(i,s[i])
+			// }
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "Bell_use1.ogg"), make(chan bool))
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "Bell_use2.ogg"), make(chan bool))
+		}
+	}
+}
+
+func checkCommand(m string) bool {
+	switch m {
+	case "join", "leave", "jihou":
+		return true
+	}
+	return false
 }
