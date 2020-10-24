@@ -117,7 +117,7 @@ func checkCommand(m string) bool {
 
 func checkStamp(m string) bool {
 	switch m {
-	case "hnn_aha":
+	case "hnn_aha", "kit_pya", "hgc_empty", "lifesaver":
 		return true
 	}
 	return false
