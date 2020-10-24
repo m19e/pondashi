@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -29,5 +28,9 @@ var (
 )
 
 func main() {
-	fmt.Println("Hello, Pondashi!")
+	Token = os.Getenv("TOKEN")
+	GuildID = os.Getenv("GUILD_ID")
+	TChannelID = os.Getenv("TEXT_CHANNEL_ID")
+	VChannelID = os.Getenv("VOICE_CHANNEL_ID")
+	Folder = "sounds"
 }
