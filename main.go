@@ -96,9 +96,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				return
 			}
 
-			counts := getCountsRing()
-
-			for _, num := range counts {
+			for _, num := range getCountsRing() {
 				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
 			}
 		}
