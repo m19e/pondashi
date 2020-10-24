@@ -73,7 +73,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if !checkCommand(m.Content[1:]) {
 		sl := strings.Split(m.Content[2:], ":")
-		dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("%s.m4a", sl[0])), make(chan bool))
+		stamp := sl[0]
+		if dgv == nil || !checkStamp(stamp) {
+			return
+		}
+		dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, attachCodec(stamp)), make(chan bool))
 	} else {
 		switch m.Content {
 		case "!join":
