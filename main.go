@@ -65,11 +65,11 @@ func main() {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.ID == s.State.User.ID {
+	if m.Author.ID == s.State.User.ID || m.Content == "" {
 		return
 	}
 
-	// log.Printf("[%s]", m.Content)
+	log.Printf("[%s]", m.Content)
 
 	if !checkCommand(m.Content[1:]) {
 		sl := strings.Split(m.Content[2:], ":")
