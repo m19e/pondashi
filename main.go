@@ -117,7 +117,7 @@ func checkCommand(m string) bool {
 
 func checkStamp(m string) bool {
 	switch m {
-	case "askr_nice", "askr_help", "hgc_empty", "kit_pya", "kit_no", "hnn_aha", "lifesaver":
+	case "askr_nice", "askr_help", "hgc_oko", "hgc_empty", "kit_pya", "kit_no", "hnn_aha", "hnn_yaha", "lifesaver":
 		return true
 	}
 	return false
@@ -125,7 +125,7 @@ func checkStamp(m string) bool {
 
 func attachCodec(m string) string {
 	switch m {
-	case "askr_nice", "askr_help", "hgc_empty", "kit_pya", "kit_no", "hnn_aha":
+	case "askr_nice", "askr_help", "hgc_oko", "hgc_empty", "kit_pya", "kit_no", "hnn_aha", "hnn_yaha":
 		return fmt.Sprintf("%s.%s", m, "m4a")
 	case "lifesaver":
 		return fmt.Sprintf("%s.%s", m, "mp3")
