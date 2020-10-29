@@ -33,7 +33,8 @@ var (
 	Folder     string
 	err        error
 
-	dgv *discordgo.VoiceConnection
+	dgv     *discordgo.VoiceConnection
+	playing bool
 )
 
 func main() {
