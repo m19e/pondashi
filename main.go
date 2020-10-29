@@ -15,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var Sounds = map[string]interface{}{}
+var Sounds = map[string]string{}
 
 func init() {
 	if os.Getenv("GO_ENV") == "" {
