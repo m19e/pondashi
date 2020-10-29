@@ -35,6 +35,7 @@ var (
 
 	dgv     *discordgo.VoiceConnection
 	playing bool
+	jobs    chan string
 )
 
 func main() {
@@ -43,6 +44,8 @@ func main() {
 	TChannelID = os.Getenv("TEXT_CHANNEL_ID")
 	VChannelID = os.Getenv("VOICE_CHANNEL_ID")
 	Folder = "sounds"
+
+	jobs = make(chan string, 10)
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
@@ -75,16 +78,26 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if !checkCommand(m.Content[1:]) {
 		sl := strings.Split(m.Content[2:], ":")
 		stamp := sl[0]
-		if dgv == nil || playing || !checkStamp(stamp) {
+		if dgv == nil || !checkStamp(stamp) {
 			return
 		}
 
-		playing = true
-		defer func() {
-			playing = false
-		}()
+		jobs <- stamp
 
-		dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, attachCodec(stamp)), make(chan bool))
+		if playing {
+			return
+		} else {
+			playing = true
+			for {
+				j, ok := <-jobs
+				if !ok {
+					playing = false
+					jobs = make(chan string, 10)
+					break
+				}
+				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, attachCodec(j)), make(chan bool))
+			}
+		}
 	} else {
 		switch m.Content {
 		case "!join":
