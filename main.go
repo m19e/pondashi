@@ -75,9 +75,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if !checkCommand(m.Content[1:]) {
 		sl := strings.Split(m.Content[2:], ":")
 		stamp := sl[0]
-		if dgv == nil || !checkStamp(stamp) {
+		if dgv == nil || playing || !checkStamp(stamp) {
 			return
 		}
+
+		playing = true
+		defer func() {
+			playing = false
+		}()
+
 		dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, attachCodec(stamp)), make(chan bool))
 	} else {
 		switch m.Content {
