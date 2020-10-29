@@ -151,24 +151,6 @@ func checkCommand(m string) bool {
 	return false
 }
 
-func checkStamp(m string) bool {
-	switch m {
-	case "askr_nice", "askr_help", "hgc_oko", "hgc_empty", "kit_pya", "kit_no", "hnn_aha", "hnn_yaha", "hnn_complain", "lifesaver":
-		return true
-	}
-	return false
-}
-
-func attachCodec(m string) string {
-	switch m {
-	case "askr_nice", "askr_help", "hgc_oko", "hgc_empty", "kit_pya", "kit_no", "hnn_aha", "hnn_yaha", "hnn_complain":
-		return fmt.Sprintf("%s.%s", m, "m4a")
-	case "lifesaver":
-		return fmt.Sprintf("%s.%s", m, "mp3")
-	}
-	return "Bell_use1.ogg"
-}
-
 func getCountsRing() []int {
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 	hour := time.Now().In(jst).Hour()
