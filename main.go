@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -14,6 +15,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var Sounds = map[string]interface{}{}
+
 func init() {
 	if os.Getenv("GO_ENV") == "" {
 		os.Setenv("GO_ENV", "dev")
@@ -22,6 +25,13 @@ func init() {
 	err := godotenv.Load(fmt.Sprintf(".env%s", os.Getenv("GO_ENV")))
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	files, _ := ioutil.ReadDir("./sounds")
+
+	for _, f := range files {
+		filename := f.Name()
+		Sounds[strings.Split(filename, ".")[0]] = filename
 	}
 }
 
