@@ -86,13 +86,19 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	log.Printf("[%s]", m.Content)
 
 	if !checkCommand(m.Content[1:]) {
-		sl := strings.Split(m.Content[2:], ":")
-		stamp := sl[0]
-		if dgv == nil || !checkStamp(stamp) {
+		if dgv == nil {
 			return
 		}
 
-		jobs <- stamp
+		sl := strings.Split(m.Content[2:], ":")
+		stamp := sl[0]
+
+		filename, ok := Sounds[stamp]
+		if !ok {
+			return
+		}
+
+		jobs <- filename
 
 		if playing {
 			return
@@ -105,7 +111,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 					jobs = make(chan string, 10)
 					break
 				}
-				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, attachCodec(j)), make(chan bool))
+				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, j), make(chan bool))
 			}
 		}
 	} else {
