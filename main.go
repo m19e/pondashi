@@ -102,17 +102,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if playing {
 			return
-		} else {
-			playing = true
-			for {
-				j, ok := <-jobs
-				if !ok {
-					playing = false
-					jobs = make(chan string, 10)
-					break
-				}
-				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, j), make(chan bool))
+		}
+
+		playing = true
+		for {
+			j, ok := <-jobs
+			if !ok {
+				playing = false
+				jobs = make(chan string, 10)
+				break
 			}
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, j), make(chan bool))
 		}
 	} else {
 		switch m.Content {
