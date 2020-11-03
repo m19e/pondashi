@@ -170,3 +170,11 @@ func getCountsRing() []int {
 
 	return slice
 }
+
+func createMentions(users []*discordgo.User) string {
+	var mentions []string
+	for _, u := range users {
+		mentions = append(mentions, u.Mention())
+	}
+	return strings.Join(mentions, " ")
+}
