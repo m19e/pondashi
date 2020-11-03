@@ -140,6 +140,63 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
 			}
 
+		case "!kaboom":
+			gs, err := s.Guild(GuildID)
+
+			var data discordgo.GuildChannelCreateData
+			vc, err := s.State.Channel(VChannelID)
+
+			data.Name = "爆破予定地"
+			data.Type = 2
+			data.ParentID = vc.ParentID
+
+			c, _ := s.GuildChannelCreateComplex(GuildID, data)
+
+			defer func() {
+				dgv.Disconnect()
+
+				_, err = s.ChannelDelete(c.ID)
+				if err != nil {
+					return
+				}
+			}()
+
+			target, err := s.ChannelMessageSend(TChannelID, "Please follow me.")
+
+			time.Sleep(3 * time.Second)
+
+			s.ChannelVoiceJoin(GuildID, c.ID, false, true)
+
+			var convicts []*discordgo.User
+
+			for _, vs := range gs.VoiceStates {
+				if vs.ChannelID == VChannelID {
+					member, _ := s.GuildMember(GuildID, vs.UserID)
+					convicts = append(convicts, member.User)
+				}
+			}
+
+			time.Sleep(3 * time.Second)
+
+			for _, cnv := range convicts {
+				s.GuildMemberMove(GuildID, cnv.ID, c.ID)
+				time.Sleep(250 * time.Millisecond)
+			}
+
+			count, _ := s.ChannelMessageEdit(TChannelID, target.ID, "Start a countdown.")
+
+			time.Sleep(3 * time.Second)
+
+			for i := 5; i > 0; i-- {
+				count, err = s.ChannelMessageEdit(TChannelID, count.ID, fmt.Sprintf("%d", i))
+				time.Sleep(1 * time.Second)
+			}
+
+			count, _ = s.ChannelMessageEdit(TChannelID, count.ID, "https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif")
+
+			_, err = s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s", createMentions(convicts)))
+
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "kaboom.m4a"), make(chan bool))
 		}
 	}
 }
