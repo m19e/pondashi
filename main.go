@@ -9,6 +9,7 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"unicode/utf8"
 
 	"github.com/bwmarrin/dgvoice"
 	"github.com/bwmarrin/discordgo"
@@ -86,7 +87,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	log.Printf("[%s]", m.Content)
 
 	if !checkCommand(m.Content[1:]) {
-		if dgv == nil {
+		if dgv == nil || utf8.RuneCountInString(m.Content) < 3 {
 			return
 		}
 
