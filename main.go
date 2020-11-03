@@ -120,6 +120,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			return
 		}
 
 		switch m.Content {
