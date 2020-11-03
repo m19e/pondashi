@@ -115,13 +115,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, j), make(chan bool))
 		}
 	} else {
-		switch m.Content {
-		case "!join":
+		if m.Content == "!join" {
 			dgv, err = s.ChannelVoiceJoin(GuildID, VChannelID, false, true)
 			if err != nil {
 				log.Fatal(err)
 			}
+		}
 
+		switch m.Content {
 		case "!leave":
 			if dgv == nil {
 				return
