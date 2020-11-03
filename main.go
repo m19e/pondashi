@@ -123,20 +123,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
+		if dgv == nil {
+			return
+		}
+
 		switch m.Content {
 		case "!leave":
-			if dgv == nil {
-				return
-			}
 			err = dgv.Disconnect()
 			if err != nil {
 				log.Fatal(err)
 			}
 
 		case "!jihou":
-			if dgv == nil {
-				return
-			}
 
 			for _, num := range getCountsRing() {
 				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
