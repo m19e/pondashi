@@ -47,7 +47,7 @@ func main() {
 	GuildID = os.Getenv("GUILD_ID")
 	TChannelID = os.Getenv("TEXT_CHANNEL_ID")
 	VChannelID = os.Getenv("VOICE_CHANNEL_ID")
-	Folder = "./sounds"
+	Folder = os.Getenv("FOLDER")
 
 	files, _ := ioutil.ReadDir(Folder)
 
