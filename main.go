@@ -202,7 +202,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func checkCommand(m string) bool {
 	switch m {
-	case "!join", "!leave", "!jihou", "!kaboom":
+	case "!join", "!leave", "!kaboom":
 		return true
 	}
 	return false
