@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"regexp"
 	"strings"
 	"syscall"
 	"time"
@@ -41,6 +42,8 @@ var (
 	playing bool
 	jobs    chan string
 )
+
+var rep = regexp.MustCompile(`<:([^:]+):\d+>`)
 
 func main() {
 	Token = os.Getenv("TOKEN")
@@ -234,4 +237,12 @@ func createMentions(users []*discordgo.User) string {
 		mentions = append(mentions, u.Mention())
 	}
 	return strings.Join(mentions, " ")
+}
+
+func checkStamp(m string) string {
+	match := rep.FindStringSubmatch(m)
+	if len(match) == 0 {
+		return ""
+	}
+	return match[1]
 }
