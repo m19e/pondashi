@@ -166,20 +166,17 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			s.ChannelVoiceJoin(GuildID, c.ID, false, true)
 
+			time.Sleep(3 * time.Second)
+
 			var convicts []*discordgo.User
 
 			for _, vs := range gs.VoiceStates {
 				if vs.ChannelID == VChannelID {
 					member, _ := s.GuildMember(GuildID, vs.UserID)
 					convicts = append(convicts, member.User)
+					s.GuildMemberMove(GuildID, member.User.ID, c.ID)
+					time.Sleep(250 * time.Millisecond)
 				}
-			}
-
-			time.Sleep(3 * time.Second)
-
-			for _, cnv := range convicts {
-				s.GuildMemberMove(GuildID, cnv.ID, c.ID)
-				time.Sleep(250 * time.Millisecond)
 			}
 
 			count, _ := s.ChannelMessageEdit(TChannelID, target.ID, "Start a countdown.")
