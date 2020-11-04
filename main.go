@@ -27,13 +27,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	files, _ := ioutil.ReadDir("./sounds")
-
-	for _, f := range files {
-		filename := f.Name()
-		Sounds[strings.Split(filename, ".")[0]] = filename
-	}
 }
 
 var (
@@ -54,7 +47,14 @@ func main() {
 	GuildID = os.Getenv("GUILD_ID")
 	TChannelID = os.Getenv("TEXT_CHANNEL_ID")
 	VChannelID = os.Getenv("VOICE_CHANNEL_ID")
-	Folder = "sounds"
+	Folder = "./sounds"
+
+	files, _ := ioutil.ReadDir(Folder)
+
+	for _, f := range files {
+		filename := f.Name()
+		Sounds[strings.Split(filename, ".")[0]] = filename
+	}
 
 	jobs = make(chan string, 10)
 
