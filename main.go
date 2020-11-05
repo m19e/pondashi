@@ -188,9 +188,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				time.Sleep(1 * time.Second)
 			}
 
-			count, _ = s.ChannelMessageEdit(TChannelID, count.ID, "https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif")
+			count, _ = s.ChannelMessageEdit(TChannelID, count.ID, fmt.Sprintf("See you, %s https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif", createMentions(convicts)))
 
-			_, err = s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s", createMentions(convicts)))
+			// _, err = s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s", createMentions(convicts)))
 
 			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "kaboom.m4a"), make(chan bool))
 		}
