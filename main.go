@@ -152,15 +152,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			c, _ := s.GuildChannelCreateComplex(GuildID, data)
 
-			defer func() {
-				dgv.Disconnect()
-
-				_, err = s.ChannelDelete(c.ID)
-				if err != nil {
-					return
-				}
-			}()
-
 			time.Sleep(3 * time.Second)
 
 			s.ChannelVoiceJoin(GuildID, c.ID, false, true)
@@ -179,6 +170,15 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 
 			time.Sleep(3 * time.Second)
+
+			defer func() {
+				dgv.Disconnect()
+
+				_, err = s.ChannelDelete(c.ID)
+				if err != nil {
+					return
+				}
+			}()
 
 			for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
 				if sn == "kaboom" {
