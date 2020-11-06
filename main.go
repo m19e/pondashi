@@ -121,88 +121,99 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, j), make(chan bool))
 		}
-	} else {
-		if m.Content == "!join" {
-			dgv, err = s.ChannelVoiceJoin(GuildID, VChannelID, false, true)
-			if err != nil {
-				log.Fatal(err)
+
+		return
+	}
+
+	if m.Content == "!join" {
+		dgv, err = s.ChannelVoiceJoin(GuildID, VChannelID, false, true)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	}
+
+	if dgv == nil || !dgv.Ready {
+		return
+	}
+
+	switch m.Content {
+	case "!leave":
+		err = dgv.Disconnect()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	case "!jihou":
+		for _, num := range getCountsRing() {
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
+		}
+
+	case "!kaboom":
+		var data discordgo.GuildChannelCreateData
+		vc, err := s.State.Channel(VChannelID)
+
+		data.Name = "爆破予定地"
+		data.Type = 2
+		data.ParentID = vc.ParentID
+
+		c, err := s.GuildChannelCreateComplex(GuildID, data)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(3 * time.Second)
+
+		dgv, err = s.ChannelVoiceJoin(GuildID, c.ID, false, true)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		time.Sleep(3 * time.Second)
+
+		var convicts []*discordgo.User
+
+		for _, vs := range gs.VoiceStates {
+			if vs.ChannelID == VChannelID {
+				member, _ := s.GuildMember(GuildID, vs.UserID)
+				convicts = append(convicts, member.User)
+				s.GuildMemberMove(GuildID, member.User.ID, c.ID)
+				time.Sleep(250 * time.Millisecond)
 			}
-			return
 		}
 
-		if dgv == nil || !dgv.Ready {
-			return
-		}
+		time.Sleep(3 * time.Second)
 
-		switch m.Content {
-		case "!leave":
+		playing = true
+
+		defer func() {
+			playing = false
+
+			jobs = make(chan string, 10)
+
 			err = dgv.Disconnect()
 			if err != nil {
 				log.Fatal(err)
 			}
 
-		case "!jihou":
-			for _, num := range getCountsRing() {
-				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, fmt.Sprintf("Bell_use%d.ogg", num)), make(chan bool))
+			_, err = s.ChannelDelete(c.ID)
+			if err != nil {
+				return
 			}
+		}()
 
-		case "!kaboom":
-			var data discordgo.GuildChannelCreateData
-			vc, err := s.State.Channel(VChannelID)
-
-			data.Name = "爆破予定地"
-			data.Type = 2
-			data.ParentID = vc.ParentID
-
-			c, _ := s.GuildChannelCreateComplex(GuildID, data)
-
-			time.Sleep(3 * time.Second)
-
-			s.ChannelVoiceJoin(GuildID, c.ID, false, true)
-
-			time.Sleep(3 * time.Second)
-
-			var convicts []*discordgo.User
-
-			for _, vs := range gs.VoiceStates {
-				if vs.ChannelID == VChannelID {
-					member, _ := s.GuildMember(GuildID, vs.UserID)
-					convicts = append(convicts, member.User)
-					s.GuildMemberMove(GuildID, member.User.ID, c.ID)
-					time.Sleep(250 * time.Millisecond)
+		for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
+			if sn == "kaboom" {
+				gifs := []string{
+					"https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif",
+					"https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif",
+					"https://media.giphy.com/media/rkkMc8ahub04w/giphy.gif",
+					"https://media.giphy.com/media/3oKIPwoeGErMmaI43S/giphy.gif",
 				}
+				s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s\n%s", createMentions(convicts), choiceRandomOne(gifs)))
 			}
-
-			time.Sleep(3 * time.Second)
-
-			playing = true
-
-			defer func() {
-				playing = false
-
-				jobs = make(chan string, 10)
-
-				dgv.Disconnect()
-
-				_, err = s.ChannelDelete(c.ID)
-				if err != nil {
-					return
-				}
-			}()
-
-			for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
-				if sn == "kaboom" {
-					gifs := []string{
-						"https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif",
-						"https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif",
-						"https://media.giphy.com/media/rkkMc8ahub04w/giphy.gif",
-						"https://media.giphy.com/media/3oKIPwoeGErMmaI43S/giphy.gif",
-					}
-					s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s\n%s", createMentions(convicts), choiceRandomOne(gifs)))
-				}
-				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, Sounds[sn]), make(chan bool))
-				time.Sleep(1250 * time.Millisecond)
-			}
+			dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, Sounds[sn]), make(chan bool))
+			time.Sleep(1250 * time.Millisecond)
 		}
 	}
 }
