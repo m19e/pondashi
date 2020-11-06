@@ -86,7 +86,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	log.Printf("[%s]", m.Content)
+	log.Printf("[%s]\n", m.Content)
 
 	gs, err := s.Guild(GuildID)
 
