@@ -191,7 +191,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			for _, sn := range []string{"askr_nice", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
 				if sn == "kaboom" {
-					s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s \nhttps://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif", createMentions(convicts)))
+					gifs := []string{
+						"https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif",
+						"https://media.giphy.com/media/HhTXt43pk1I1W/giphy.gif",
+						"https://media.giphy.com/media/rkkMc8ahub04w/giphy.gif",
+						"https://media.giphy.com/media/3oKIPwoeGErMmaI43S/giphy.gif",
+					}
+					s.ChannelMessageSend(TChannelID, fmt.Sprintf("See you, %s\n%s", createMentions(convicts), choiceRandomOne(gifs)))
 				}
 				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, Sounds[sn]), make(chan bool))
 				time.Sleep(1250 * time.Millisecond)
