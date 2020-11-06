@@ -215,6 +215,27 @@ func checkCommand(m string) bool {
 	return false
 }
 
+func checkStamp(m string) string {
+	match := rep.FindStringSubmatch(m)
+	if len(match) == 0 {
+		return ""
+	}
+	return match[1]
+}
+
+func choiceRandomOne(slice []string) string {
+	rand.Seed(time.Now().UnixNano())
+	return slice[rand.Intn(len(slice))]
+}
+
+func createMentions(users []*discordgo.User) string {
+	var mentions []string
+	for _, u := range users {
+		mentions = append(mentions, u.Mention())
+	}
+	return strings.Join(mentions, " ")
+}
+
 func getCountsRing() []int {
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 	hour := time.Now().In(jst).Hour()
@@ -232,27 +253,6 @@ func getCountsRing() []int {
 	}
 
 	return slice
-}
-
-func createMentions(users []*discordgo.User) string {
-	var mentions []string
-	for _, u := range users {
-		mentions = append(mentions, u.Mention())
-	}
-	return strings.Join(mentions, " ")
-}
-
-func checkStamp(m string) string {
-	match := rep.FindStringSubmatch(m)
-	if len(match) == 0 {
-		return ""
-	}
-	return match[1]
-}
-
-func choiceRandomOne(slice []string) string {
-	rand.Seed(time.Now().UnixNano())
-	return slice[rand.Intn(len(slice))]
 }
 
 func searchVoiceStates(vss []*discordgo.VoiceState, id string) bool {
