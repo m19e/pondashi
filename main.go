@@ -171,7 +171,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 			time.Sleep(3 * time.Second)
 
+			playing = true
+
 			defer func() {
+				playing = false
+
+				jobs = make(chan string, 10)
+
 				dgv.Disconnect()
 
 				_, err = s.ChannelDelete(c.ID)
