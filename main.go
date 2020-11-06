@@ -189,7 +189,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			// 	time.Sleep(1 * time.Second)
 			// }
 
-			for _, sn := range []string{"askr_nice", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
+			for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
 				if sn == "kaboom" {
 					gifs := []string{
 						"https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif",
