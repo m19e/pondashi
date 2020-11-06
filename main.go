@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"regexp"
@@ -244,4 +245,9 @@ func checkStamp(m string) string {
 		return ""
 	}
 	return match[1]
+}
+
+func choiceRandomOne(slice []string) string {
+	rand.Seed(time.Now().UnixNano())
+	return slice[rand.Intn(len(slice))]
 }
