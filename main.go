@@ -161,8 +161,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}()
 
-			// target, err := s.ChannelMessageSend(TChannelID, "Please follow me.")
-
 			time.Sleep(3 * time.Second)
 
 			s.ChannelVoiceJoin(GuildID, c.ID, false, true)
@@ -180,14 +178,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}
 
-			// count, _ := s.ChannelMessageEdit(TChannelID, target.ID, "Start a countdown.")
-
 			time.Sleep(3 * time.Second)
-
-			// for i := 5; i > 0; i-- {
-			// 	count, err = s.ChannelMessageEdit(TChannelID, count.ID, fmt.Sprintf("%d", i))
-			// 	time.Sleep(1 * time.Second)
-			// }
 
 			for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
 				if sn == "kaboom" {
@@ -202,10 +193,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, Sounds[sn]), make(chan bool))
 				time.Sleep(1250 * time.Millisecond)
 			}
-
-			// count, _ = s.ChannelMessageEdit(TChannelID, count.ID, fmt.Sprintf("See you, %s https://media.giphy.com/media/146BUR1IHbM6zu/giphy.gif", createMentions(convicts)))
-
-			// dgvoice.PlayAudioFile(dgv, fmt.Sprintf("%s/%s", Folder, "kaboom.m4a"), make(chan bool))
 		}
 	}
 }
