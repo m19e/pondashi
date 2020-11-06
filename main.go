@@ -250,3 +250,13 @@ func choiceRandomOne(slice []string) string {
 	rand.Seed(time.Now().UnixNano())
 	return slice[rand.Intn(len(slice))]
 }
+
+func searchVoiceStates(vss []*discordgo.VoiceState, id string) bool {
+	for _, vs := range vss {
+		if vs.UserID == id {
+			return true
+		}
+	}
+
+	return false
+}
