@@ -93,6 +93,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if !searchVoiceStates(gs.VoiceStates, m.Author.ID) {
 		s.ChannelMessageSend(TChannelID, fmt.Sprintf("%s Please order after join VC.", m.Author.Mention()))
+		return
 	}
 
 	if !checkCommand(m.Content) {
