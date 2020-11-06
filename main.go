@@ -97,7 +97,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if !checkCommand(m.Content) {
-		if dgv == nil {
+		if dgv == nil || !dgv.Ready {
 			return
 		}
 
@@ -131,7 +131,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 
-		if dgv == nil {
+		if dgv == nil || !dgv.Ready {
 			return
 		}
 
