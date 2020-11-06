@@ -89,6 +89,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	log.Printf("[%s]", m.Content)
 
+	gs, err := s.Guild(GuildID)
+
 	if !checkCommand(m.Content) {
 		if dgv == nil {
 			return
@@ -141,8 +143,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 
 		case "!kaboom":
-			gs, err := s.Guild(GuildID)
-
 			var data discordgo.GuildChannelCreateData
 			vc, err := s.State.Channel(VChannelID)
 
