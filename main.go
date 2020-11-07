@@ -85,7 +85,7 @@ func main() {
 }
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
-	if m.Author.ID == s.State.User.ID || m.Content == "" {
+	if m.Author.ID == s.State.User.ID || m.Content == "" || detonation {
 		return
 	}
 
@@ -155,6 +155,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 	case "!kaboom":
+		detonation = true
 		s.UpdateStatus(1, "")
 
 		var data discordgo.GuildChannelCreateData
@@ -208,6 +209,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				return
 			}
 
+			detonation = false
 			s.UpdateStatus(1, "!join to invite")
 		}()
 
