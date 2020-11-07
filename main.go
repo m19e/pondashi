@@ -192,13 +192,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		time.Sleep(3 * time.Second)
 
-		playing = true
-
 		defer func() {
-			playing = false
-
-			jobs = make(chan string, 10)
-
 			err = dgv.Disconnect()
 			if err != nil {
 				log.Fatal(err)
