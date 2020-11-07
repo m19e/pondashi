@@ -38,9 +38,10 @@ var (
 	Folder     string
 	err        error
 
-	dgv     *discordgo.VoiceConnection
-	playing bool
-	jobs    chan string
+	dgv        *discordgo.VoiceConnection
+	jobs       chan string
+	playing    bool
+	detonation bool
 )
 
 var rep = regexp.MustCompile(`<:([^:]+):\d+>`)
