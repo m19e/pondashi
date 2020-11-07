@@ -73,6 +73,8 @@ func main() {
 
 	dg.AddHandler(messageCreate)
 
+	dg.UpdateStatus(1, "!join to invite")
+
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
@@ -130,6 +132,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		s.UpdateStatus(1, "!leave to disconnect")
 		return
 	}
 
@@ -143,6 +146,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			log.Fatal(err)
 		}
+		s.UpdateStatus(1, "!join to invite")
 
 	case "!jihou":
 		for _, num := range getCountsRing() {
@@ -150,6 +154,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 	case "!kaboom":
+		s.UpdateStatus(1, "")
+
 		var data discordgo.GuildChannelCreateData
 		vc, err := s.State.Channel(VChannelID)
 
@@ -200,6 +206,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if err != nil {
 				return
 			}
+
+			s.UpdateStatus(1, "!join to invite")
 		}()
 
 		for _, sn := range []string{"askr_hgcsorry", "hgc_oko", "kit_pya", "kaboom", "hnn_yaha"} {
