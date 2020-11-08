@@ -93,11 +93,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	gs, err := s.Guild(GuildID)
 
-	if !searchVoiceStates(gs.VoiceStates, m.Author.ID) {
-		s.ChannelMessageSend(TChannelID, fmt.Sprintf("%s Please order after join VC.", m.Author.Mention()))
-		return
-	}
-
 	if !checkCommand(m.Content) {
 		if dgv == nil || !dgv.Ready {
 			return
@@ -129,6 +124,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.Content == "!join" {
+		if !searchVoiceStates(gs.VoiceStates, m.Author.ID) {
+			s.ChannelMessageSend(TChannelID, fmt.Sprintf("%s Please order after join VC.", m.Author.Mention()))
+			return
+		}
+
 		dgv, err = s.ChannelVoiceJoin(GuildID, VChannelID, false, true)
 		if err != nil {
 			log.Fatal(err)
@@ -143,6 +143,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	switch m.Content {
 	case "!leave":
+		if !searchVoiceStates(gs.VoiceStates, m.Author.ID) {
+			s.ChannelMessageSend(TChannelID, fmt.Sprintf("%s Please order after join VC.", m.Author.Mention()))
+			return
+		}
 		err = dgv.Disconnect()
 		if err != nil {
 			log.Fatal(err)
@@ -155,6 +159,11 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 	case "!kaboom":
+		if !searchVoiceStates(gs.VoiceStates, m.Author.ID) {
+			s.ChannelMessageSend(TChannelID, fmt.Sprintf("%s Please order after join VC.", m.Author.Mention()))
+			return
+		}
+
 		detonation = true
 		s.UpdateStatus(1, "")
 
